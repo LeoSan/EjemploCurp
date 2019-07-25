@@ -1,0 +1,68 @@
+//datos a enviar
+            $datos = '?email=cuenca623%40gmail.com';
+            
+			//url contra la que atacamos
+            $ch = curl_init("http://IP/api/Consumidor/".$datos);
+			//enviar informacion desde el header
+			curl_setopt($ch, CURLOPT_HTTPHEADER, array('HTTP_X_AUTH_TOKEN:pB3q'));
+            //true si es correcto, false si no lo es
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            //establecemos el verbo http que queremos utilizar para la petición
+            curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "GET");
+            //obtenemos la respuesta
+            $response = curl_exec($ch);
+            // Se cierra el recurso CURL y se liberan los recursos del sistema
+            curl_close($ch);
+            
+			if(!$response) {
+                return false;
+            }else{
+               
+			   $ValidaUsuario = json_decode($response); 
+			   
+			    if ($ValidaUsuario->code == 200){
+					$thearray = get_object_vars( $ValidaUsuario );
+					if ($thearray['data'][0]->id_usuario == 0){ // debes colocar > 
+						
+						$id_consumidor  = $thearray['data'][0]->id_usuario; 
+					
+					}else{
+						// Insertar datos de consumidor y obtener su ID  											
+							$datosConsumidor = "?sEmail=cuenca623%40gmail.com";
+							$datos =  array("sEmail"=>"cuenca623@gmail.com", "sNombre"=>"Leonard Jose", "sPrimerApellido"=>"Cuenca", "sSegundoApellido"=>"Roa", "sRFC"=>"NO", "sTipoTelefono"=>"5567819325", "iExtension"=>"55", "dFechaNacimiento"=>"01/01/2000", "sGenero"=>"M", "sCURP"=>"NO", "sDireccion"=>"Av insurgentes sur", "iNumeroExterior"=>"803", "iNumeroInterior"=>"45", "sColonia"=>"Colonia del Valle", "sMunicipio"=>"CDMX", "sEstado"=>"CDMX", "sPais"=>"MX", "iCP"=>"02768");
+							//url contra la que atacamos
+							$ch = curl_init("http://API/api/QA/Consumidor/");
+							//enviar informacion desde el header
+							curl_setopt($ch, CURLOPT_HTTPHEADER, array('HTTP_X_AUTH_TOKEN:pB3qgfLO1mh'));
+							//true si es correcto, false si no lo es
+							curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+							//establecemos el verbo http que queremos utilizar para la petición
+							curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+							curl_setopt($ch, CURLOPT_POSTFIELDS,http_build_query($datos));
+							//Ejecutamos 
+							$response2 = curl_exec($ch);
+
+							$respInsertConsumidor = json_decode($response2); 
+							$arrCondumidor = get_object_vars( $respInsertConsumidor );
+							$id_consumidor =  $arrCondumidor['data'][0]->id_usuario; 
+							curl_close($ch);
+					}
+				}
+		
+						// Insertar datos de la queja. 
+							$datos =  array("sProveedor"=>"138", "iUsuario"=>"167469", "sLugar"=>"Ciudad Mexico", "dFechaAdquisicion"=>"01/01/2000", "sFormaPago"=>"TARJETA", "nCosto"=>"0", "sMoneda"=>"MXP", "sModalidad"=>"TARJETA", "sDescripcion"=>"ME ROBAN PLAN DE DATOS 20", "sGenero"=>"M", "sCURP"=>"NO", "sDireccion"=>"Av insurgentes sur", "iNumeroExterior"=>"803", "iNumeroInterior"=>"45", "sColonia"=>"Colonia del Valle", "sMunicipio"=>"CDMX", "sEstado"=>"CDMX", "sPais"=>"MX", "iCP"=>"02768");
+							//url contra la que atacamos
+							$ch = curl_init("http://API/api/Queja/");
+							//enviar informacion desde el header
+							curl_setopt($ch, CURLOPT_HTTPHEADER, array('HTTP_X_AUTH_TOKEN:pB3'));
+							//true si es correcto, false si no lo es
+							curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+							//establecemos el verbo http que queremos utilizar para la petición
+							curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+							curl_setopt($ch, CURLOPT_POSTFIELDS,http_build_query($datos));
+							//Ejecutamos 
+							$response2 = curl_exec($ch);
+
+							$respInsertQuejas = json_decode($response2); 
+							
+            }
